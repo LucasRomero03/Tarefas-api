@@ -4,9 +4,13 @@ import com.lrtech.toDoList.entity.Todo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@ToString
 public class TodoDto {
 
   private Long id;
@@ -14,6 +18,8 @@ public class TodoDto {
   private String descricao;
   private Boolean realizado;
   private int prioridade;
+
+
 
   public TodoDto(Todo todo){
     id=todo.getId();
