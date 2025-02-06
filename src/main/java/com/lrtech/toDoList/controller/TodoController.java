@@ -5,14 +5,7 @@ import java.net.URI;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lrtech.toDoList.dto.TodoDto;
@@ -64,7 +57,11 @@ public class TodoController {
     TodoDto dto = todoService.getById(id);
     return ResponseEntity.ok(dto);
   }
-
+  @GetMapping(value = "/nome")
+  public ResponseEntity<TodoDto> getByNome(@RequestParam("nome") String nome) {
+    TodoDto dto = todoService.getByNome(nome);
+    return ResponseEntity.ok(dto);
+  }
   // getAll
   @GetMapping
   public ResponseEntity<Page<TodoDto>> getAllTodos(Pageable pageable) {

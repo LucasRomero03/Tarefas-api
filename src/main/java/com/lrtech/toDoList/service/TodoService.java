@@ -21,7 +21,10 @@ public class TodoService {
     Todo todo = todorep.findById(id).orElseThrow(() -> new ResourceNotFound("recurso não encontrado"));
     return new TodoDto(todo);
   }
-
+  public TodoDto getByNome(String nome) {
+    Todo todo = todorep.findByNomeIgnoreCase(nome).orElseThrow(() -> new ResourceNotFound("recurso não encontrado"));
+    return new TodoDto(todo);
+  }
   public Page<TodoDto> getAllTodos(Pageable pageable) {
     Page<Todo> todos = todorep.findAll(pageable);
     return todos.map(x -> new TodoDto(x));
