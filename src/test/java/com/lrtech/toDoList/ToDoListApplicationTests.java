@@ -62,4 +62,15 @@ class ToDoListApplicationTests {
 				.expectStatus().isBadRequest();
 				
 	}
+	// @Test
+	// void testeGetTodoByName(){
+	// 	webTestClient
+	// 	.get()
+	// 	.uri("/todos/nome")
+	// 	.exchange()
+	// 	.expectStatus().isOk()
+	// 	.expectBody()
+	// 		.jsonPath("$.content")
+
+	// }
 }
