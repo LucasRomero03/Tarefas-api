@@ -1,5 +1,7 @@
 package com.lrtech.toDoList.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,9 +23,12 @@ public class TodoService {
     Todo todo = todorep.findById(id).orElseThrow(() -> new ResourceNotFound("recurso não encontrado"));
     return new TodoDto(todo);
   }
-  public TodoDto getByNome(String nome) {
-    Todo todo = todorep.findByNomeIgnoreCase(nome).orElseThrow(() -> new ResourceNotFound("recurso não encontrado"));
-    return new TodoDto(todo);
+  public List<TodoDto> getByNome(String nome) {
+    List<Todo> listTodos = todorep.findByNomeContainingIgnoreCase(nome);
+    if(listTodos.isEmpty()){
+      throw new ResourceNotFound("recurso nao encontrado");
+    }
+    return listTodos.stream().map(x -> new TodoDto(x)).toList();
   }
   public Page<TodoDto> getAllTodos(Pageable pageable) {
     Page<Todo> todos = todorep.findAll(pageable);

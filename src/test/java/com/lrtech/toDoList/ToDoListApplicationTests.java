@@ -1,5 +1,7 @@
 package com.lrtech.toDoList;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,7 @@ class ToDoListApplicationTests {
 	private WebTestClient webTestClient;
 	
  // é importante ter testes. sempre um cenário de sucesso e um de erro 
-	// @Test se o retorno fosse uma lista 
+	// @Test se o retorno fosse uma lista mas como retorna um item só 
 	// void testCreateTodoSucess() {
 	// 	var todo = new Todo("mero","meroteste", false,1);
 	// 	webTestClient
@@ -34,10 +36,10 @@ class ToDoListApplicationTests {
 			
 	// }
 
-	@Test
+	@Test // junit 5 , ja vem por causa do  spring-boot-starter-test
 	void testCreateTodoSucess() {
 		var todo = new TodoDto("mero","meroteste", false,1);
-		webTestClient
+		webTestClient // -> webtestclient do Spring web flux 
 			.post()
 			.uri("/todos")
 			.bodyValue(todo)
@@ -62,15 +64,66 @@ class ToDoListApplicationTests {
 				.expectStatus().isBadRequest();
 				
 	}
-	// @Test
-	// void testeGetTodoByName(){
-	// 	webTestClient
-	// 	.get()
-	// 	.uri("/todos/nome")
-	// 	.exchange()
-	// 	.expectStatus().isOk()
-	// 	.expectBody()
-	// 		.jsonPath("$.content")
+@Test
+void testGetTodoByNameSuccess() {
+    String todoName = "mero";  // Nome esperado (pode estar em qualquer case)
 
-	// }
+    webTestClient
+        .get()
+        .uri("/todos/nome?nome={nome}", todoName)
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody()
+				.jsonPath("$").isArray()
+        .jsonPath("$[0].nome")
+        .value(name -> assertEquals(todoName.toLowerCase(), name.toString().toLowerCase())) ;// Normaliza o case antes de comparar value atribui naturalmente a propriedade
+				//.jsonPath("$.descricao")
+					//.value(descricao -> assertEquals("meroteste", descricao));
+					
+}
+@Test
+void testGetTodoByNameFailure() {
+    String todoName = "joao";  // Nome esperado (pode estar em qualquer case)
+		
+    webTestClient
+        .get()
+        .uri("/todos/nome?nome={nome}", todoName)
+        .exchange()
+        .expectStatus().is5xxServerError()
+        .expectBody()
+				.jsonPath("$.status").isEqualTo(500);
+        // Normaliza o case antes de comparar value atribui naturalmente a propriedade
+				//.jsonPath("$.descricao")
+					//.value(descricao -> assertEquals("meroteste", descricao));
+					
+}
+@Test
+void testDeleteTodoSucess(){
+	Long id = 1l;
+	webTestClient
+		.delete()
+		.uri("/todos/{id}",id)
+		.exchange()
+		.expectStatus().isNoContent();
+
+
+}
+@Test
+void testDeleteFailure() {
+    Long id = 999l; // Nome esperado (pode estar em qualquer case)
+		
+    webTestClient
+		.delete()
+		.uri("/todos/{id}",id)
+		.exchange()
+        .expectStatus().is5xxServerError()
+        .expectBody()
+				.jsonPath("$.status").isEqualTo(500);
+        // Normaliza o case antes de comparar value atribui naturalmente a propriedade
+				//.jsonPath("$.descricao")
+					//.value(descricao -> assertEquals("meroteste", descricao));
+					
+}
+
+
 }
