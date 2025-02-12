@@ -31,4 +31,15 @@ public class UserControllerTests {
 				.jsonPath("$.senha").isEqualTo(user.getSenha());
 			
 	}
+  @Test 
+  void testGetAllUsersSucess(){
+    webTestClient
+    .get()
+    .uri("/usuarios")
+    .exchange()
+    .expectStatus().isOk()
+    .expectBody()
+      .jsonPath("$").isArray();
+
+  }
 }

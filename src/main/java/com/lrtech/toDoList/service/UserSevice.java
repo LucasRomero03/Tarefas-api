@@ -1,5 +1,7 @@
 package com.lrtech.toDoList.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.lrtech.toDoList.dto.UserDto;
@@ -19,6 +21,12 @@ public class UserSevice {
     User user = userRep.findById(id).orElseThrow( () -> new ResourceNotFound("recurso nao encontrado"));
 
     return new UserDto(user);
+  }
+
+  public List<UserDto> getAllUsers(){
+    List<User> users = userRep.findAll();
+    return users.stream().map(x -> new UserDto(x)).toList();
+    
   }
 
   public UserDto createUser(UserDto userDto){
