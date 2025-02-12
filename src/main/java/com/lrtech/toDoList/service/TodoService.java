@@ -24,7 +24,7 @@ public class TodoService {
     return new TodoDto(todo);
   }
   public List<TodoDto> getByNome(String nome) {
-    List<Todo> listTodos = todorep.findByNomeContainingIgnoreCase(nome);
+    List<Todo> listTodos = todorep.findByNomeContainingIgnoreCaseOrderByNomeAsc(nome);
     if(listTodos.isEmpty()){
       throw new ResourceNotFound("recurso nao encontrado");
     }

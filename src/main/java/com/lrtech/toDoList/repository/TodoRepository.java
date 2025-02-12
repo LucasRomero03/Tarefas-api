@@ -9,6 +9,6 @@ import com.lrtech.toDoList.entity.Todo;
 public interface TodoRepository extends JpaRepository<Todo,Long>{
 
     List<Todo> findByNomeIgnoreCase(String nome);
-    List<Todo> findByNomeContainingIgnoreCase(String nome);
+    List<Todo> findByNomeContainingIgnoreCaseOrderByNomeAsc(String nome);
 }
 

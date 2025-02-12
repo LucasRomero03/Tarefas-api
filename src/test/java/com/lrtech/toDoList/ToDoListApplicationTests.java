@@ -124,6 +124,46 @@ void testDeleteFailure() {
 					//.value(descricao -> assertEquals("meroteste", descricao));
 					
 }
-
-
+@Test
+void testPutSucess(){
+	Long id= 1l;
+	var todo = new TodoDto("joao","meroteste", false,1);
+	webTestClient
+		.put()
+		.uri("/todos/{id}",id)
+		.bodyValue(todo)
+		.exchange()
+		.expectStatus().isOk()
+		.expectBody()
+		.jsonPath("$.nome").isEqualTo(todo.getNome())
+				.jsonPath("$.descricao").isEqualTo(todo.getDescricao())
+				.jsonPath("$.realizado").isEqualTo(todo.getRealizado())
+				.jsonPath("$.prioridade").isEqualTo(todo.getPrioridade());
 }
+
+@Test
+void testPutFailure(){
+	// campos vazios
+	Long id= 1l;
+	var todo = new TodoDto("","", false,1);
+	webTestClient
+		.put()
+		.uri("/todos/{id}",id)
+		.bodyValue(todo)
+		.exchange()
+		.expectStatus().isBadRequest();
+// teste id invalido
+		Long id1= 999l;
+	var todo1 = new TodoDto("meroshow","teste1", false,1);
+	webTestClient
+		.put()
+		.uri("/todos/{id}",id1)
+		.bodyValue(todo1)
+		.exchange()
+		.expectStatus().is5xxServerError()
+		.expectBody()
+				.jsonPath("$.status").isEqualTo(500);
+}
+}
+
+

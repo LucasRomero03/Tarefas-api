@@ -99,7 +99,7 @@ public class TodoController {
 
   // PUT
   @PutMapping(value = "/{id}")
-  public ResponseEntity<TodoDto> updateTodo(@PathVariable Long id, @RequestBody TodoDto dto) {
+  public ResponseEntity<TodoDto> updateTodo(@PathVariable Long id, @RequestBody @Valid TodoDto dto) {
     TodoDto copy = todoService.updateTodo(id, dto);
     return ResponseEntity.ok(copy);
   }
