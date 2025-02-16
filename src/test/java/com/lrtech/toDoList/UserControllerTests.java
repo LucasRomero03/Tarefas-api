@@ -42,4 +42,25 @@ public class UserControllerTests {
       .jsonPath("$").isArray();
 
   }
+//   @Test
+// void testGetAllUsersPaginatedSuccess() {
+//     webTestClient
+//         .get()
+//         .uri(uriBuilder -> uriBuilder
+//             .path("/usuarios")
+//             .queryParam("page", 0)
+//             .queryParam("size", 2)
+//             .build())
+//         .exchange()
+//         .expectStatus().isOk()
+//         .expectBody()
+//             .jsonPath("$.content").isArray() // Verifica que 'content' é um array
+//             .jsonPath("$.content.length()").isEqualTo(2) // Verifica que a página tem 2 elementos
+//             .jsonPath("$.content[0].id").isNotEmpty() // Valida que o primeiro usuário tem um 'id'
+//             .jsonPath("$.content[0].nome").isNotEmpty() // Valida que o 'nome' do primeiro usuário não é vazio
+//             .jsonPath("$.page").isEqualTo(0) // Valida o número da página
+//             .jsonPath("$.size").isEqualTo(2) // Verifica o tamanho da página
+//             .jsonPath("$.totalElements").isNotEmpty(); // Valida que 'totalElements' existe
+// }
+
 }

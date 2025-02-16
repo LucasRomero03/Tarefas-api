@@ -2,6 +2,8 @@ package com.lrtech.toDoList.dto;
 
 import com.lrtech.toDoList.entity.User;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import lombok.ToString;
 public class UserDto {
   private Long id;
   private String nome;
+  @NotBlank(message = "campo obrigatorio")
   private String email;
   private String senha;
 

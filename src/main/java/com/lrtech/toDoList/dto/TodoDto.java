@@ -15,9 +15,9 @@ import lombok.ToString;
 public class TodoDto {
 
   private Long id;
-  @NotBlank
+  @NotBlank(message="dados obrigatorios")
   private String nome;
-  @NotBlank
+  @NotBlank(message="dados obrigatorios")
   private String descricao;
   private Boolean realizado;
   private int prioridade;

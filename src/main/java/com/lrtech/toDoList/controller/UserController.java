@@ -17,6 +17,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.lrtech.toDoList.dto.UserDto;
 import com.lrtech.toDoList.service.UserSevice;
 
+import jakarta.validation.Valid;
+
 
 
 
@@ -42,7 +44,7 @@ public class UserController {
   }
   
   @PostMapping
-  public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
+  public ResponseEntity<UserDto> createUser(@RequestBody @Valid UserDto userDto) {
       UserDto dto1 = userSerSevice.createUser(userDto);
       URI uri = ServletUriComponentsBuilder
         .fromCurrentRequest()
@@ -59,7 +61,7 @@ public class UserController {
     return ResponseEntity.noContent().build();
   }
   @PutMapping(value = "/{id}")
-  public ResponseEntity<UserDto> atualizarUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+  public ResponseEntity<UserDto> atualizarUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
       userSerSevice.atualizarUser(id,userDto);
       return ResponseEntity.ok(userDto);
   }
