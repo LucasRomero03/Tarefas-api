@@ -49,7 +49,7 @@ public class TodoService {
   }
 
   public void deleteTodo(Long id) {
-
+    if(!todorep.existsById(id)) throw new ResourceNotFoundException("recurso nao encontrado ");
     todorep.deleteById(id);
 
   }

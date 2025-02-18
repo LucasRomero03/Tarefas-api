@@ -39,9 +39,9 @@ public class UserSevice {
   }
 
   public void deleteUser(Long id) {
-    // if(!userRep.existsById(id)){
-    // throw new ResourceNotFound("recurso nao encontrado");
-    // }
+    if(!userRep.existsById(id)){
+    throw new ResourceNotFoundException("recurso nao encontrado");
+    }
 
     userRep.deleteById(id);
 

@@ -55,7 +55,7 @@ public class UserController {
       
       return ResponseEntity.created(uri).body(dto1);
   }
-  @DeleteMapping
+  @DeleteMapping("/{id}")
   public ResponseEntity<Void> deleteUserByid(@PathVariable Long id){
     userSerSevice.deleteUser(id);
     return ResponseEntity.noContent().build();
