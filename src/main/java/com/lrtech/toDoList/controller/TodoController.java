@@ -72,6 +72,11 @@ public class TodoController {
     List<TodoDto> listTododto = todoService.getByNome(nome);
     return ResponseEntity.ok(listTododto);
   }
+  @GetMapping(value = "/id/{id}")
+  public ResponseEntity<List<TodoDto>> getByNome(@PathVariable Long id) {
+    List<TodoDto> listTododto = todoService.getTodoByUserId(id);
+    return ResponseEntity.ok(listTododto);
+  }
   // getAll
   @GetMapping
   public ResponseEntity<Page<TodoDto>> getAllTodos(Pageable pageable) {

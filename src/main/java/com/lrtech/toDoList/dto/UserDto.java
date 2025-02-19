@@ -1,9 +1,10 @@
 package com.lrtech.toDoList.dto;
 
+import java.util.List;
+
 import com.lrtech.toDoList.entity.User;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,14 @@ public class UserDto {
   @NotBlank(message = "campo obrigatorio")
   private String email;
   private String senha;
+  
 
   public UserDto(User user){
     id = user.getId();
     nome = user.getNome();
     email = user.getEmail();
     senha = user.getSenha();
+    
   }
 
   public UserDto(String nome, String email, String senha) {

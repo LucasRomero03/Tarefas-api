@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.lrtech.toDoList.dto.TodoDto;
 import com.lrtech.toDoList.entity.Todo;
+import com.lrtech.toDoList.entity.User;
 import com.lrtech.toDoList.repository.TodoRepository;
 import com.lrtech.toDoList.service.exceptions.ResourceNotFound;
 import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
@@ -32,6 +33,13 @@ public class TodoService {
     }
     return listTodos.stream().map(x -> new TodoDto(x)).toList();
   }
+  public List<TodoDto> getTodoByUserId(Long id) {
+    List<Todo> listTodos = todorep.findTodosByUserId(id);
+    if (listTodos.isEmpty()) {
+      throw new ResourceNotFoundException("recurso nao encontrado");
+    }
+    return listTodos.stream().map(x -> new TodoDto(x)).toList();
+  }
 
   public Page<TodoDto> getAllTodos(Pageable pageable) {
     Page<Todo> todos = todorep.findAll(pageable);
@@ -44,6 +52,9 @@ public class TodoService {
     todo.setDescricao(dto.getDescricao());
     todo.setPrioridade(dto.getPrioridade());
     todo.setRealizado(dto.getRealizado());
+    User user = new User();
+    user.setId(dto.getUserDto().getId());
+    todo.setUser(user);
     todorep.save(todo);
     return new TodoDto(todo);
   }

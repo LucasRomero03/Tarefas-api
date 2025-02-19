@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.lrtech.toDoList.dto.UserDto;
 import com.lrtech.toDoList.entity.User;
 import com.lrtech.toDoList.repository.UserRepository;
+import com.lrtech.toDoList.service.exceptions.DataBaseException;
 import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
 
 @Service
@@ -19,7 +20,7 @@ public class UserSevice {
 
   public UserDto getById(Long id) {
     User user = userRep.findById(id).orElseThrow(() -> new ResourceNotFoundException("recurso nao encontrado"));
-
+    
     return new UserDto(user);
   }
 
@@ -30,12 +31,17 @@ public class UserSevice {
   }
 
   public UserDto createUser(UserDto userDto) {
-    User user = new User();
-    user.setNome(userDto.getNome());
-    user.setEmail(userDto.getEmail());
-    user.setSenha(userDto.getSenha());
-    userRep.save(user);
-    return new UserDto(user);
+    try {
+      User user = new User();
+      user.setNome(userDto.getNome());
+      user.setEmail(userDto.getEmail());
+      user.setSenha(userDto.getSenha());
+      userRep.save(user);
+      return new UserDto(user);  
+    } catch (Exception e) {
+      throw new DataBaseException("email já existe ");
+    }
+    
   }
 
   public void deleteUser(Long id) {

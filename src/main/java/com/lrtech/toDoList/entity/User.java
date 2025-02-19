@@ -1,12 +1,15 @@
 package com.lrtech.toDoList.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -29,6 +32,9 @@ public class User {
   @Column(unique =true, nullable = false )
   private String email;
   private String senha;
+
+  @OneToMany(mappedBy = "user")
+  private List<Todo> todos = new ArrayList<>();
   
 
 
