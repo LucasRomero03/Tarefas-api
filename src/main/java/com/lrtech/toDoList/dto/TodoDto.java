@@ -21,7 +21,7 @@ public class TodoDto {
   private String descricao;
   private Boolean realizado;
   private int prioridade;
-  private UserDto userDto;
+  private UserDtoResponse userDto;
 
   public TodoDto(Todo todo) {
     id = todo.getId();
@@ -29,11 +29,11 @@ public class TodoDto {
     descricao = todo.getDescricao();
     realizado = todo.getRealizado();
     prioridade = todo.getPrioridade();
-    userDto = new UserDto(todo.getUser());
+    userDto = new UserDtoResponse(todo.getUser());
 
   }
 
-  public TodoDto(String nome, String descricao, Boolean realizado, int prioridade, UserDto userDto) {
+  public TodoDto(String nome, String descricao, Boolean realizado, int prioridade, UserDtoResponse userDto) {
     this.nome = nome;
     this.descricao = descricao;
     this.realizado = realizado;

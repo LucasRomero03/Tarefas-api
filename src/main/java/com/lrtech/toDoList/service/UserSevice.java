@@ -19,10 +19,16 @@ public class UserSevice {
   }
 
   public UserDto getById(Long id) {
-    User user = userRep.findById(id).orElseThrow(() -> new ResourceNotFoundException("recurso nao encontrado"));
+    User user = userRep.findById(id).orElseThrow(() -> new ResourceNotFoundException("usuario nao encontrado"));
     
     return new UserDto(user);
   }
+
+  // public UserDtoResponse getById1(Long id) {
+  //   User user = userRep.findById(id).orElseThrow(() -> new ResourceNotFoundException("recurso nao encontrado"));
+    
+  //   return new UserDtoResponse(user);
+  // }
 
   public List<UserDto> getAllUsers() {
     List<User> users = userRep.findAll();
