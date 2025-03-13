@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.lrtech.toDoList.dto.UserDto;
+import com.lrtech.toDoList.dto.auth.AutenticadoDto;
 import com.lrtech.toDoList.service.UserSevice;
+import com.lrtech.toDoList.service.auth.AuthorizationService;
 
 import jakarta.validation.Valid;
 
@@ -27,9 +29,11 @@ import jakarta.validation.Valid;
 public class UserController {
 
   private UserSevice userSerSevice;
+  private AuthorizationService authorizationService;
 
-  public UserController(UserSevice userSerSevice){
+  public UserController(UserSevice userSerSevice, AuthorizationService authorizationService){
     this.userSerSevice=userSerSevice;
+    this.authorizationService=authorizationService;
   }
 
 
@@ -38,6 +42,16 @@ public class UserController {
       UserDto userDto = userSerSevice.getById(id);
       return ResponseEntity.ok(userDto);
   }
+
+  @GetMapping(value = "/me")
+  public ResponseEntity<AutenticadoDto> getMe() {
+
+    AutenticadoDto dto = authorizationService.getMe();
+
+    return ResponseEntity.ok(dto);
+
+  }
+
   @GetMapping
   public ResponseEntity<List<UserDto>> getAllUsers(){
     return ResponseEntity.ok(userSerSevice.getAllUsers());

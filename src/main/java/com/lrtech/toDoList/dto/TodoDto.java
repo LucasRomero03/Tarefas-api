@@ -3,6 +3,7 @@ package com.lrtech.toDoList.dto;
 import com.lrtech.toDoList.entity.Todo;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ public class TodoDto {
   private String descricao;
   private Boolean realizado;
   private int prioridade;
+  @NotNull(message="dados obrigatorios")
   private UserDtoResponse userDto;
 
   public TodoDto(Todo todo) {

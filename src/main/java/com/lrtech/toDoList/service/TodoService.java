@@ -79,6 +79,7 @@ public class TodoService {
 
   public TodoDto updateTodo(Long id, TodoDto dto) {
     if(!todorep.existsById(id)) throw new ResourceNotFoundException("todo nao encontrado ");
+    if(dto.getUserDto().getId() == null) throw new ResourceNotFoundException("user nao passado ");
     Todo todo = todorep.getReferenceById(id);
     todo.setNome(dto.getNome());
     todo.setDescricao(dto.getDescricao());
