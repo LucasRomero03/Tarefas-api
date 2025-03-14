@@ -1,6 +1,7 @@
 package com.lrtech.toDoList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,30 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.lrtech.toDoList.dto.TodoDto;
 import com.lrtech.toDoList.dto.UserDtoResponse;
+import com.lrtech.toDoList.service.TodoService;
+import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+// @Import(SecurityConfig.class)
 class ToDoListApplicationTests {
 
 	@Autowired
 	private WebTestClient webTestClient;
+
+	@Autowired
+	private TodoService todoService;
+	
+
+	//testando metodos q retornam as aexceções certas 
+	@Test
+	public void testarMetodoDeFindById(){
+		
+		var id = 999l;
+		assertThrows(ResourceNotFoundException.class, () -> todoService.getById(id));
+
+
+
+	}
 
 	// é importante ter testes. sempre um cenário de sucesso e um de erro
 	// @Test se o retorno fosse uma lista mas como retorna um item só
@@ -72,7 +91,7 @@ class ToDoListApplicationTests {
 	}
 
 	////////////// TESTES DO GET
-
+//todo ver essa questao de autenticaçaõ 
 	@Test
 	void testGetSucess() {
 		Long id = 1L;
