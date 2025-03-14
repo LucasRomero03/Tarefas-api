@@ -33,7 +33,7 @@ public class AuthController {
   }
 
   @PostMapping("/login")
-  public ResponseEntity login(@RequestBody LoginDto dto) {
+  public ResponseEntity<?> login(@RequestBody LoginDto dto) {
     try {
       var userNamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.senha());
       var auth = this.authenticationManager.authenticate(userNamePassword);
@@ -47,7 +47,7 @@ public class AuthController {
   }
 
   @PostMapping("/registrar")
-  public ResponseEntity registrar(@RequestBody RegistrarDto dto) {
+  public ResponseEntity<?> registrar(@RequestBody RegistrarDto dto) {
     if (repository.findByEmail(dto.email()) != null)
       return ResponseEntity.badRequest().body("usuario ja existe");
 

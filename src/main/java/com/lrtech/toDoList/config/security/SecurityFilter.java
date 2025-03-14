@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Component
+@SuppressWarnings("null")
 public class SecurityFilter extends OncePerRequestFilter{
 
   private TokenService tokenService;
@@ -31,7 +32,7 @@ public class SecurityFilter extends OncePerRequestFilter{
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)      throws ServletException, IOException {
+  protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)      throws ServletException, IOException {
     var token = this.recoverToken(request);
     if (token != null) {
       var subject = tokenService.validateToken(token);
