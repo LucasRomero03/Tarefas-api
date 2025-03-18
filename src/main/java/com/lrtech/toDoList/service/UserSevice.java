@@ -19,7 +19,8 @@ public class UserSevice {
   }
 
   public UserDto getById(Long id) {
-    User user = userRep.findById(id).orElseThrow(() -> new ResourceNotFoundException("usuario nao encontrado"));
+    User user = userRep.getById(id);
+
     
     return new UserDto(user);
   }

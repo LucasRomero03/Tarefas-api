@@ -1,6 +1,7 @@
 package com.lrtech.toDoList.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.lrtech.toDoList.entity.User;
@@ -8,5 +9,8 @@ import com.lrtech.toDoList.entity.User;
 public interface UserRepository extends JpaRepository<User,Long> {
  
   UserDetails findByEmail(String email);
+   @SuppressWarnings("null")
+  @Query(value = " SELECT obj FROM User obj JOIN FETCH obj.todos WHERE obj.id = :id")
+  User getById(Long id);
 
 }
