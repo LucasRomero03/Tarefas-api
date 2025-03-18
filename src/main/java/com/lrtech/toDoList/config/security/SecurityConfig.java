@@ -41,11 +41,12 @@ public class SecurityConfig {
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.POST, "/auth/registrar").permitAll()
+            //.requestMatchers("/h2-console/**").permitAll()
             .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
             .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/todos").hasRole("ADMIN")
+            .requestMatchers( "/todos/**").hasRole("ADMIN")
+            .requestMatchers( HttpMethod.POST,"/todos").hasRole("ADMIN")
             .anyRequest().authenticated()
-
         )
         .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
         .build();

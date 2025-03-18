@@ -15,6 +15,7 @@ import com.lrtech.toDoList.entity.User;
 import com.lrtech.toDoList.repository.UserRepository;
 import com.lrtech.toDoList.service.auth.AuthorizationService;
 import com.lrtech.toDoList.service.auth.TokenService;
+import com.lrtech.toDoList.service.exceptions.UnauthorizedException;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,7 +42,8 @@ public class AuthController {
       var token = tokenService.generateToken((User)auth.getPrincipal());
       return ResponseEntity.ok(new LoginResponseDto(token));
     } catch (Exception e) {
-      return ResponseEntity.status(403).body("usuario errou as credenciais ou nao existe");
+      throw new UnauthorizedException("usuario errou as credenciais ");
+      //return ResponseEntity.status(403).body("usuario errou as credenciais ou nao existe");
     }
 
   }

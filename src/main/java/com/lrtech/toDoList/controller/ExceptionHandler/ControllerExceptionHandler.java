@@ -14,6 +14,7 @@ import com.lrtech.toDoList.dto.ValidationError;
 import com.lrtech.toDoList.service.exceptions.DataBaseException;
 import com.lrtech.toDoList.service.exceptions.ForbidenException;
 import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
+import com.lrtech.toDoList.service.exceptions.UnauthorizedException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -50,6 +51,12 @@ public class ControllerExceptionHandler {
   @ExceptionHandler(ForbidenException.class)
   public ResponseEntity<CustomError> forbidenException(ForbidenException message, HttpServletRequest request) {
     HttpStatus status = HttpStatus.FORBIDDEN;
+    CustomError error = new CustomError(Instant.now(), status.value(), message.getMessage(), request.getRequestURI());
+    return ResponseEntity.status(status).body(error);
+  }
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<CustomError> unauthorizedException(UnauthorizedException message, HttpServletRequest request) {
+    HttpStatus status = HttpStatus.UNAUTHORIZED;
     CustomError error = new CustomError(Instant.now(), status.value(), message.getMessage(), request.getRequestURI());
     return ResponseEntity.status(status).body(error);
   }

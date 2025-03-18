@@ -7,7 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
+import com.lrtech.toDoList.controller.auth.AuthController;
 import com.lrtech.toDoList.repository.UserRepository;
 import com.lrtech.toDoList.service.auth.TokenService;
 
@@ -18,36 +18,55 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 @SuppressWarnings("null")
-public class SecurityFilter extends OncePerRequestFilter{
+public class SecurityFilter extends OncePerRequestFilter {
 
   private TokenService tokenService;
   private UserRepository repository;
-  
-
- 
 
   public SecurityFilter(TokenService tokenService, UserRepository repository) {
     this.tokenService = tokenService;
     this.repository = repository;
+
   }
 
   @Override
-  protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)      throws ServletException, IOException {
+  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
     var token = this.recoverToken(request);
+    String requestUri = request.getRequestURI();
+
+    if (requestUri.equals("/auth/login") || requestUri.equals("/auth/registrar") || requestUri.startsWith("/h2-console")) {
+      filterChain.doFilter(request, response);
+      return;
+    }
+    //CASO O USUARIO NAO FORNEÇA token
+    if (token == null) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+      response.getWriter().write("usuario nao autenticado");
+      response.getWriter().flush();
+      return;
+    }
     if (token != null) {
+     try {
       var subject = tokenService.validateToken(token);
       UserDetails user = repository.findByEmail(subject);
-
       var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(authentication);
+     } catch (Exception e) {
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED); // 401 Unauthorized
+      response.getWriter().write("token invalido ");
+      response.getWriter().flush();
+     }
+      
     }
     filterChain.doFilter(request, response);
   }
 
-  private String recoverToken(HttpServletRequest request){
+  private String recoverToken(HttpServletRequest request) {
     var authHeader = request.getHeader("Authorization");
-    if(authHeader == null) return null;
+    if (authHeader == null ) {
+      return null;
+    }
     return authHeader.replace("Bearer ", "");
   }
-  
+
 }
