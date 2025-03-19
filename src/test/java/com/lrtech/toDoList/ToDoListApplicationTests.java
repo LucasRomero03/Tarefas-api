@@ -11,13 +11,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.lrtech.toDoList.dto.TodoDto;
 import com.lrtech.toDoList.dto.UserDtoResponse;
+import com.lrtech.toDoList.dto.auth.LoginDto;
+import com.lrtech.toDoList.dto.auth.LoginResponseDto;
 import com.lrtech.toDoList.service.TodoService;
 import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // @Import(SecurityConfig.class)
 class ToDoListApplicationTests {
-
+//TODO terminar de botar o token para liberar as requisições 
 	@Autowired
 	private WebTestClient webTestClient;
 
@@ -35,6 +37,21 @@ class ToDoListApplicationTests {
 
 
 	}
+
+	@SuppressWarnings("null")
+	private String obterToken() {
+    return webTestClient
+            .post()
+            .uri("auth/login")
+            .bodyValue(new LoginDto("meroteste", "123456")) // Email e senha de um usuário de teste
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody(LoginResponseDto.class)
+            .returnResult()
+            .getResponseBody()
+            .token(); // Pega o token do response
+}
+
 
 	// é importante ter testes. sempre um cenário de sucesso e um de erro
 	// @Test se o retorno fosse uma lista mas como retorna um item só
@@ -59,10 +76,12 @@ class ToDoListApplicationTests {
 	////////////////// TESTES DO POST
 	@Test // junit 5 , ja vem por causa do spring-boot-starter-test
 	void testCreateTodoSucess() {
+		var token = obterToken();
 		var todo = new TodoDto("mero", "meroteste", false, 1, new UserDtoResponse(1l, "Dragon"));
-		webTestClient // -> webtestclient do Spring web flux
+		webTestClient // 
 				.post()
 				.uri("/todos")
+				.header("Authorization", "Bearer " + token)
 				.bodyValue(todo)
 				.exchange()
 				.expectStatus().isCreated()
@@ -95,10 +114,11 @@ class ToDoListApplicationTests {
 	@Test
 	void testGetSucess() {
 		Long id = 1L;
-
+		var token = obterToken();
 		webTestClient
 				.get()
 				.uri("/todos/{id}", id)
+				.header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isOk()
 				.expectBody()
