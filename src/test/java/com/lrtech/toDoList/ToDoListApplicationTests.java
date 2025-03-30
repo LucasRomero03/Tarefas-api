@@ -19,7 +19,6 @@ import com.lrtech.toDoList.service.exceptions.ResourceNotFoundException;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 // @Import(SecurityConfig.class)
 class ToDoListApplicationTests {
-//TODO terminar de botar o token para liberar as requisições 
 	@Autowired
 	private WebTestClient webTestClient;
 
@@ -110,7 +109,6 @@ class ToDoListApplicationTests {
 	}
 
 	////////////// TESTES DO GET
-//TODO ver essa questao de autenticaçaõ 
 	@Test
 	void testGetSucess() {
 		Long id = 1L;
@@ -128,12 +126,13 @@ class ToDoListApplicationTests {
 
 	@Test
 	void testGetFailure() {
-
+		var token = obterToken();
 		Long id = 999L;
 
 		webTestClient
 				.get()
 				.uri("todos/{id}", id)
+				.header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isNotFound();
 	}
@@ -142,12 +141,14 @@ class ToDoListApplicationTests {
 	void testGetTodoByNameSuccess() {
 		String todoName = "mero"; // Nome esperado (pode estar em qualquer case)
 		// uri("/todos/nome?nome={nome}", todoName) - outra meneira de passar a uri
+		var token = obterToken();
 		webTestClient
 				.get()
 				.uri(uriBuilder -> uriBuilder
 						.path("/todos/nome")
 						.queryParam("nome", todoName)
 						.build())
+				 .header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isOk()
 				.expectBody()
@@ -165,10 +166,12 @@ class ToDoListApplicationTests {
 	@Test
 	void testGetTodoByNameFailure() {
 		String todoName = "joao"; // Nome esperado (pode estar em qualquer case)
+		var token = obterToken();
 
 		webTestClient
 				.get()
 				.uri("/todos/nome?nome={nome}", todoName)
+				.header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isNotFound();
 
@@ -178,9 +181,11 @@ class ToDoListApplicationTests {
 	@Test
 	void testDeleteTodoSucess() {
 		Long id = 1l;
+		var token = obterToken();
 		webTestClient
 				.delete()
 				.uri("/todos/{id}", id)
+				.header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isNoContent();
 
@@ -189,10 +194,12 @@ class ToDoListApplicationTests {
 	@Test
 	void testDeleteFailure() {
 		Long id = 999l; // Nome esperado (pode estar em qualquer case)
+		var token = obterToken();
 
 		webTestClient
 				.delete()
 				.uri("/todos/{id}", id)
+				.header("Authorization", "Bearer " + token)
 				.exchange()
 				.expectStatus().isNotFound();
 		// Normaliza o case antes de comparar value atribui naturalmente a propriedade
@@ -204,10 +211,12 @@ class ToDoListApplicationTests {
 	@Test
 	void testPutSucess() {
 		Long id = 1l;
+		var token = obterToken();
 		var todo = new TodoDto("joao", "meroteste", false, 1, new UserDtoResponse(1l, "Dragon"));
 		webTestClient
 				.put()
 				.uri("/todos/{id}", id)
+				.header("Authorization", "Bearer " + token)
 				.bodyValue(todo)
 				.exchange()
 				.expectStatus().isOk()
@@ -225,10 +234,12 @@ class ToDoListApplicationTests {
 	void testPutFailure(){
 	// campos vazios
 	Long id= 1l;
+	var token = obterToken();
 	var todo = new TodoDto("","", false,1,new UserDtoResponse(1l, "Dragon"));
 	webTestClient
 	.put()
 	.uri("/todos/{id}",id)
+	.header("Authorization", "Bearer " + token)
 	.bodyValue(todo)
 	.exchange()
 	.expectStatus().is4xxClientError();
@@ -238,6 +249,7 @@ class ToDoListApplicationTests {
 	webTestClient
 	.put()
 	.uri("/todos/{id}",id1)
+	.header("Authorization", "Bearer " + token)
 	.bodyValue(todo1)
 	.exchange()
 	.expectStatus().isNotFound();
